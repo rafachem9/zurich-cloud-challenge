@@ -1,0 +1,24 @@
+def repo_url = 'http://172.21.0.4:3000/rafachem9/test-repo.git'
+def git_branch = 'master'
+
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: '${git_branch}', url: '${repo_url}'
+            }
+        }
+        stage('Terraform init') {
+            steps {
+                sh 'cd deploy && terraform init'
+            }
+        }
+        stage('Terraform apply') {
+
+            steps {
+                sh 'cd deploy && terraform apply --auto-approve'
+            }
+        }
+    }
+}
